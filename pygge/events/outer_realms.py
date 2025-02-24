@@ -1,7 +1,35 @@
+"""
+Module for interacting with the Outer Realms event in Goodgame Empire.
+
+This module defines the `OuterRealms` class, which provides methods to retrieve event points, 
+select a castle, obtain a token, and log in to the event.
+"""
+
 from ..base_gge_socket import BaseGgeSocket
 
 class OuterRealms(BaseGgeSocket):
+    """
+    A class to interact with the Outer Realms event in Goodgame Empire.
+
+    This class provides methods for retrieving event points, selecting a castle, 
+    obtaining tokens, and logging into the event.
+    """
+
     def get_outer_realms_points(self, sync=True, quiet=False):
+        """
+        Retrieve the player's Outer Realms event points.
+
+        Args:
+            sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
+            quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False, False if it failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs and `quiet` is False.
+        """
         try:
             self.send_json_command("tsh", {})
             if sync:
@@ -14,8 +42,23 @@ class OuterRealms(BaseGgeSocket):
                 raise e
             return False
 
-
     def choose_outer_realm_castle(self, castle_id, premium=0, sync=True, quiet=False):
+        """
+        Select a castle for the Outer Realms event.
+
+        Args:
+            castle_id (int): The ID of the castle to choose.
+            premium (int, optional): Indicates whether a premium option is selected (default is 0).
+            sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
+            quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False, False if it failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs and `quiet` is False.
+        """
         try:
             self.send_json_command("tsc", {
                 "ID": castle_id,
@@ -34,6 +77,20 @@ class OuterRealms(BaseGgeSocket):
             return False
 
     def get_outer_realm_token(self, sync=True, quiet=False):
+        """
+        Retrieve the Outer Realms event token.
+
+        Args:
+            sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
+            quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False, False if it failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs and `quiet` is False.
+        """
         try:
             self.send_json_command("glt", {
                 "GST": 2
@@ -47,8 +104,23 @@ class OuterRealms(BaseGgeSocket):
             if not quiet:
                 raise e
             return False
-    
+
     def login_outer_realm(self, token, sync=True, quiet=False):
+        """
+        Log in to the Outer Realms event using a token.
+
+        Args:
+            token (str): The event token used for authentication.
+            sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
+            quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False, False if it failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs and `quiet` is False.
+        """
         try:
             self.send_json_command("tlep", {
                 "TLT": token

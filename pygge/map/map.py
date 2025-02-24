@@ -1,7 +1,38 @@
+"""
+Module for interacting with the world map in Goodgame Empire.
+
+This module defines the `Map` class, which provides methods to retrieve map chunks, 
+locate NPCs, and fetch target information.
+"""
+
 from ..base_gge_socket import BaseGgeSocket
 
 class Map(BaseGgeSocket):
+    """
+    A class for interacting with the world map in Goodgame Empire.
+
+    This class provides methods to retrieve specific map chunks, locate NPCs, 
+    and fetch information about target locations.
+    """
+
     def get_map_chunk(self, kingdom, x, y, sync=True, quiet=False):
+        """
+        Retrieve a chunk of the world map.
+
+        Args:
+            kingdom (int): The ID of the kingdom to retrieve the map chunk from.
+            x (int): The x-coordinate of the top-left corner of the chunk.
+            y (int): The y-coordinate of the top-left corner of the chunk.
+            sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
+            quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False, False if it failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs and `quiet` is False.
+        """
         try:
             self.send_json_command("gaa", {
                 "KID": kingdom,
@@ -19,8 +50,27 @@ class Map(BaseGgeSocket):
             if not quiet:
                 raise e
             return False
-    
+
     def get_closest_npc(self, kingdom, npc_type, min_level=1, max_level=-1, owner_id=-1, sync=True, quiet=False):
+        """
+        Locate the closest NPC based on given criteria.
+
+        Args:
+            kingdom (int): The ID of the kingdom to search in.
+            npc_type (int): The type of NPC to locate.
+            min_level (int, optional): The minimum level of the NPC. Defaults to 1.
+            max_level (int, optional): The maximum level of the NPC (-1 for no limit). Defaults to -1.
+            owner_id (int, optional): The ID of the NPC owner (-1 for any owner). Defaults to -1.
+            sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
+            quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False, False if it failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs and `quiet` is False.
+        """
         try:
             self.send_json_command("fnm", {
                 "T": npc_type,
@@ -40,6 +90,25 @@ class Map(BaseGgeSocket):
             return False
 
     def get_target_infos(self, kingdom, sx, sy, tx, ty, sync=True, quiet=False):
+        """
+        Retrieve information about a specific target on the map.
+
+        Args:
+            kingdom (int): The ID of the kingdom where the target is located.
+            sx (int): The x-coordinate of the starting position.
+            sy (int): The y-coordinate of the starting position.
+            tx (int): The x-coordinate of the target.
+            ty (int): The y-coordinate of the target.
+            sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
+            quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False, False if it failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs and `quiet` is False.
+        """
         try:
             self.send_json_command("adi", {
                 "SX": sx,

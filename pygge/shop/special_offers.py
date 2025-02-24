@@ -1,7 +1,37 @@
+"""
+Module for handling special offers in Goodgame Empire.
+
+This module defines the `SpecialOffers` class, which provides methods to purchase 
+special offers and collect special offer gifts.
+"""
+
 from ..base_gge_socket import BaseGgeSocket
 
 class SpecialOffers(BaseGgeSocket):
+    """
+    A class for handling special offers in Goodgame Empire.
+
+    This class provides methods to purchase special offers and collect 
+    gifts associated with special offers.
+    """
+
     def buy_special_offer(self, offer_id, package_ids=[0], sync=True, quiet=False):
+        """
+        Purchase a special offer.
+
+        Args:
+            offer_id (int): The ID of the special offer to purchase.
+            package_ids (list, optional): A list of package IDs included in the offer. Defaults to [0].
+            sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
+            quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False, False if it failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs and `quiet` is False.
+        """
         try:
             self.send_json_command("oop", {
                 "OID": offer_id,
@@ -17,8 +47,23 @@ class SpecialOffers(BaseGgeSocket):
             if not quiet:
                 raise e
             return False
-    
+
     def collect_special_offer_gift(self, gift_id, sync=True, quiet=False):
+        """
+        Collect a special offer gift.
+
+        Args:
+            gift_id (int): The ID of the special offer gift to collect.
+            sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
+            quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False, False if it failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs and `quiet` is False.
+        """
         try:
             self.send_json_command("oop", {
                 "OID": gift_id,
@@ -34,9 +79,3 @@ class SpecialOffers(BaseGgeSocket):
             if not quiet:
                 raise e
             return False
-
-
-
-
-def buy_special_offer(ws, offer_id, package_ids=[0]):
-    ws.send(f"""%xt%EmpireEx_3%oop%1%{{"OID":{offer_id},"C":1,"ODI":{package_ids}}}""")

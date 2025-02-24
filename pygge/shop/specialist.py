@@ -1,7 +1,36 @@
+"""
+Module for managing specialist purchases in Goodgame Empire.
+
+This module defines the `Specialist` class, which provides methods to buy various 
+specialist services, such as market carts, marauders, overseers, travel maps, 
+tax collectors, and drill instructors.
+"""
+
 from ..base_gge_socket import BaseGgeSocket
 
 class Specialist(BaseGgeSocket):
+    """
+    A class for managing specialist purchases in Goodgame Empire.
+
+    This class provides methods to buy market carts, marauders, overseers, 
+    travel maps, tax collectors, and drill instructors.
+    """
+
     def buy_market_carts(self, sync=True, quiet=False):
+        """
+        Purchase market carts.
+
+        Args:
+            sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
+            quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False, False if it failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs and `quiet` is False.
+        """
         try:
             self.send_json_command("bcs", {
                 "PO": -1
@@ -15,8 +44,22 @@ class Specialist(BaseGgeSocket):
             if not quiet:
                 raise e
             return False
-    
+
     def buy_marauder(self, sync=True, quiet=False):
+        """
+        Purchase a marauder.
+
+        Args:
+            sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
+            quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False, False if it failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs and `quiet` is False.
+        """
         try:
             self.send_json_command("bms", {
                 "PO": -1
@@ -30,9 +73,28 @@ class Specialist(BaseGgeSocket):
             if not quiet:
                 raise e
             return False
-        
+
     def buy_overseer(self, resource_type, sync=True, quiet=False):
-        # resource_type: 0 = Wood, 1 = Stone, 2 = Food, ??? = honey, ??? = mead
+        """
+        Purchase an overseer for resource management.
+
+        Args:
+            resource_type (int): The type of resource overseer to buy.
+                - 0: Wood
+                - 1: Stone
+                - 2: Food
+                - ???: Honey (unknown)
+                - ???: Mead (unknown)
+            sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
+            quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False, False if it failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs and `quiet` is False.
+        """
         try:
             self.send_json_command("bos", {
                 "T": resource_type,
@@ -47,8 +109,22 @@ class Specialist(BaseGgeSocket):
             if not quiet:
                 raise e
             return False
-        
+
     def buy_travel_maps(self, sync=True, quiet=False):
+        """
+        Purchase travel maps.
+
+        Args:
+            sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
+            quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False, False if it failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs and `quiet` is False.
+        """
         try:
             self.send_json_command("brs", {
                 "PO": -1
@@ -62,8 +138,22 @@ class Specialist(BaseGgeSocket):
             if not quiet:
                 raise e
             return False
-        
+
     def buy_tax_collector(self, sync=True, quiet=False):
+        """
+        Purchase a tax collector.
+
+        Args:
+            sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
+            quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False, False if it failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs and `quiet` is False.
+        """
         try:
             self.send_json_command("btx", {
                 "PO": -1
@@ -77,8 +167,22 @@ class Specialist(BaseGgeSocket):
             if not quiet:
                 raise e
             return False
-        
+
     def buy_drill_instructor(self, sync=True, quiet=False):
+        """
+        Purchase a drill instructor.
+
+        Args:
+            sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
+            quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False, False if it failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs and `quiet` is False.
+        """
         try:
             self.send_json_command("bis", {
                 "PO": -1
