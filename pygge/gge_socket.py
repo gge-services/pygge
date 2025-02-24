@@ -174,7 +174,7 @@ class GgeSocket(
         Raises:
             Exception: If an error occurs during the operation and `quiet` is False.
         """
-        self.get_castle_defense_complete(x, y, castle_id, sync=sync, quiet=quiet)
+        self.get_castle_defense(x, y, castle_id, sync=sync, quiet=quiet)
         self.get_lords(sync=sync, quiet=quiet)
 
     def close_defense_menu(self, sync: bool = True, quiet: bool = False) -> None:
