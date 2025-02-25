@@ -28,6 +28,7 @@ from .castle.defense import Defense
 
 from .events.beyond_the_horizon import BeyondTheHorizon
 from .events.events import Events
+from .events.fortune_teller import FortuneTeller
 from .events.imperial_patronage import ImperialPatronage
 from .events.lucky_wheel import LuckyWheel
 from .events.mercenary_camp import MercenaryCamp
@@ -46,6 +47,7 @@ from .lords.lords import Lords
 from .map.attack import Attack
 from .map.bookmarks import Bookmarks
 from .map.map import Map
+from .map.movements import Movements
 from .map.ruins import Ruins
 from .map.spy import Spy
 
@@ -86,6 +88,7 @@ class GgeSocket(
     Defense,
     BeyondTheHorizon,
     Events,
+    FortuneTeller,
     ImperialPatronage,
     LuckyWheel,
     MercenaryCamp,
@@ -100,6 +103,7 @@ class GgeSocket(
     Attack,
     Bookmarks,
     Map,
+    Movements,
     Ruins,
     Spy,
     Bestseller,

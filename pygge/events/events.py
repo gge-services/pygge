@@ -15,6 +15,33 @@ class Events(BaseGgeSocket):
     and selecting event difficulty levels.
     """
 
+    def get_events(self, sync=True, quiet=False):
+        """
+        Get the list of events available to the player.
+
+        Args:
+            sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
+            quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False, False if it failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs and `quiet` is False.
+        """
+        try:
+            self.send_json_command("sei", {})
+            if sync:
+                response = self.wait_for_json_response("sei")
+                self.raise_for_status(response)
+                return response
+            return True
+        except Exception as e:
+            if not quiet:
+                raise e
+            return False
+
     def get_event_points(self, event_id, sync=True, quiet=False):
         """
         Retrieve the player's points for a specific event.

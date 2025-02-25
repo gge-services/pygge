@@ -247,3 +247,47 @@ class Auth(BaseGgeSocket):
             if not quiet:
                 raise e
             return False
+
+    def login_e4k(
+        self, name: str, password: str, sync: bool = True, quiet: bool = False
+    ) -> dict | bool:
+        """
+        Log in to an account using the Empire 4 Kingdoms API.
+
+        Args:
+            email (str): The email address to log in with.
+            password (str): The password to log in with.
+            sync (bool, optional): If True, wait for a response and return it. Defaults to True.
+            quiet (bool, optional): If True, suppress exceptions and return False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False. False if the operation failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs during the operation and `quiet` is False.
+        """
+        try:
+            self.send_json_command(
+                "core_lga",
+                {
+                    "NM": name,
+                    "PW": password,
+                    "L": "fr",
+                    "AID": "1674256959939529708",
+                    "DID": 5,
+                    "PLFID": "3",
+                    "ADID": "null",
+                    "AFUID": "appsFlyerUID",
+                    "IDFV": "null",
+                },
+            )
+            if sync:
+                response = self.wait_for_json_response("core_lga")
+                self.raise_for_status(response, expected_status=10005)
+                return response
+            return True
+        except Exception as e:
+            if not quiet:
+                raise e
+            return False

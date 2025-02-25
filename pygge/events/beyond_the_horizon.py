@@ -40,13 +40,14 @@ class BeyondTheHorizon(BaseGgeSocket):
                 raise e
             return False
 
-    def choose_bth_castle(self, castle_id, premium=0, sync=True, quiet=False):
+    def choose_bth_castle(self, castle_id, only_rubies=0, use_rubies=0, sync=True, quiet=False):
         """
         Select a castle for the Beyond the Horizon event.
 
         Args:
             castle_id (int): The ID of the castle to choose.
-            premium (int, optional): Indicates whether a premium option is selected (default is 0).
+            only_rubies (int, optional): If True, only use rubies for the selection. Defaults to 0.
+            use_rubies (int, optional): If True, use rubies for the selection. Defaults to 0.
             sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
             quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
 
@@ -60,8 +61,8 @@ class BeyondTheHorizon(BaseGgeSocket):
         try:
             self.send_json_command("tsc", {
                 "ID": castle_id,
-                "OC2": premium,
-                "PWR": premium,
+                "OC2": only_rubies,
+                "PWR": use_rubies,
                 "GST": 3
             })
             if sync:
