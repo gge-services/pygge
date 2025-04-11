@@ -31,8 +31,20 @@ class Movements(BaseGgeSocket):
         try:
             self.send_json_command("gam", {})
             if sync:
-                response = self.wait_for_json_response("gam")
-                self.raise_for_status(response)
+                responses = self.wait_for_json_response("gam", count=-1)
+                for response in responses:
+                    self.raise_for_status(response)
+                
+                response = responses[0]
+                for r in responses[1:]:
+                    response["payload"]["data"]["M"].extend(r["payload"]["data"]["M"])
+                    response["payload"]["data"]["O"].extend(r["payload"]["data"]["O"])
+                response["payload"]["data"]["M"] = list(
+                    {movement["M"]["MID"]: movement for movement in response["payload"]["data"]["M"]}.values()
+                )
+                response["payload"]["data"]["O"] = list(
+                    {movement["OID"]: movement for movement in response["payload"]["data"]["O"]}.values()
+                )
                 return response
             return True
         except Exception as e:

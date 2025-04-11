@@ -212,7 +212,7 @@ class BaseGgeSocket(websocket.WebSocketApp):
         self.send(f"<msg t='{t}'><body action='{action}' r='{r}'>{data}</body></msg>")
 
     def __wait_for_response(
-        self, type: str, conditions: dict, timeout: int = 5
+        self, type: str, conditions: dict, timeout: int = 5, count: int = 1
     ) -> dict:
         """
         Internal function which waits for a response with the specified type and conditions.
@@ -221,9 +221,11 @@ class BaseGgeSocket(websocket.WebSocketApp):
             type (str): The expected type of the response.
             conditions (dict): The expected conditions of the response.
             timeout (int, optional): The timeout to wait for the response. Defaults to 5.
+            count (int, optional): The number of expected responses. Defaults to 1. -1 or 0 for infinite.
 
         Returns:
-            dict: The response.
+            dict: The response if count is 1.
+            list[dict]: The list of responses if count is greater than 1.
 
         Raises:
             TimeoutError: If the response is not received within the timeout.
@@ -232,19 +234,29 @@ class BaseGgeSocket(websocket.WebSocketApp):
         message = {
             "type": type,
             "conditions": conditions,
-            "response": None,
+            "responses": [],
             "event": event,
         }
         self.__messages.append(message)
         result = event.wait(timeout)
+        if count != 1 and result:
+            while True:
+                event.clear()
+                result = event.wait(0.1)
+                if not result or len(message["responses"]) == count:
+                    result = True
+                    break
         self.__messages.remove(message)
         if not result:
             raise TimeoutError("Timeout waiting for response")
-        response = message["response"]
+        if count == 1:
+            response = message["responses"][0]
+        else:
+            response = message["responses"]
         return response
 
     def wait_for_json_response(
-        self, command: str, data: dict | bool = False, timeout: int = 5
+        self, command: str, data: dict | bool = False, timeout: int = 5, count: int = 1
     ) -> dict:
         """
         Waits for a JSON response with the specified command and data.
@@ -253,19 +265,21 @@ class BaseGgeSocket(websocket.WebSocketApp):
             command (str): The expected command of the response.
             data (dict, optional): The expected data of the response. Defaults to False.
             timeout (int, optional): The timeout to wait for the response. Defaults to 5.
+            count (int, optional): The number of expected responses. Defaults to 1. -1 or 0 for infinite.
 
         Returns:
-            dict: The response.
+            dict: The response if count is 1.
+            list[dict]: The list of responses if count is greater than 1.
 
         Raises:
             TimeoutError: If the response is not received within the timeout.
         """
         return self.__wait_for_response(
-            "json", {"command": command, "data": data}, timeout=timeout
+            "json", {"command": command, "data": data}, timeout=timeout, count=count
         )
 
     def wait_for_xml_response(
-        self, t: str, action: str, r: str, timeout: int = 5
+        self, t: str, action: str, r: str, timeout: int = 5, count: int = 1
     ) -> dict:
         """
         Waits for an XML response with the specified t, action, and r attributes.
@@ -275,9 +289,11 @@ class BaseGgeSocket(websocket.WebSocketApp):
             action (str): The expected action attribute of the response.
             r (str): The expected r attribute of the response.
             timeout (int, optional): The timeout to wait for the response. Defaults to 5.
+            count (int, optional): The number of expected responses. Defaults to 1. -1 or 0 for infinite.
 
         Returns:
-            dict: The response.
+            dict: The response if count is 1.
+            list[dict]: The list of responses if count is greater than 1.
 
         Raises:
             TimeoutError: If the response is not received within the timeout.
@@ -290,6 +306,7 @@ class BaseGgeSocket(websocket.WebSocketApp):
                 "r": r,
             },
             timeout=timeout,
+            count=count,
         )
 
     def raise_for_status(self, response: dict, expected_status: int = 0) -> None:
@@ -364,7 +381,7 @@ class BaseGgeSocket(websocket.WebSocketApp):
         """
         for message in self.__messages:
             if self.__compare_response(response, message):
-                message["response"] = response
+                message["responses"].append(response)
                 message["event"].set()
                 break
 
