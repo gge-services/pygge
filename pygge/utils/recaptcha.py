@@ -37,7 +37,6 @@ class Recaptcha(BaseGgeSocket):
             options.add_argument("--window-size=1,1")
             options.add_experimental_option("excludeSwitches", ["enable-automation"])
             driver = webdriver.Chrome(options=options)
-            driver.minimize_window()
 
             driver.get("https://empire.goodgamestudios.com/")
             wait = WebDriverWait(driver, 30, poll_frequency=0.01)
