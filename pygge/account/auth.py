@@ -111,15 +111,16 @@ class Auth(BaseGgeSocket):
                 return response
         return response
 
-    def login(
-        self, name: str, password: str, sync: bool = True, quiet: bool = False
+    def login_with_recaptcha_token(
+        self, name: str, password: str, recaptcha_token: str, sync: bool = True, quiet: bool = False
     ) -> dict | bool:
         """
-        Log in to an account.
+        Log in to an account with a reCAPTCHA token.
 
         Args:
             name (str): The username to log in with.
             password (str): The password to log in with.
+            recaptcha_token (str): The reCAPTCHA token to verify the login.
             sync (bool, optional): If True, wait for a response and return it. Defaults to True.
             quiet (bool, optional): If True, suppress exceptions and return False on failure. Defaults to False.
 
@@ -149,6 +150,7 @@ class Auth(BaseGgeSocket):
                     "GCI": "",
                     "SID": 9,
                     "PLFID": 1,
+                    "RCT": recaptcha_token,
                 },
             )
             if sync:
