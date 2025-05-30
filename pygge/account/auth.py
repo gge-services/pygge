@@ -163,6 +163,56 @@ class Auth(BaseGgeSocket):
                 raise e
             return False
 
+    def login_without_recaptcha_token(
+        self, name: str, password: str, sync: bool = True, quiet: bool = False
+    ) -> dict | bool:
+        """
+        Log in to an account without a reCAPTCHA token.
+
+        Args:
+            name (str): The username to log in with.
+            password (str): The password to log in with.
+            sync (bool, optional): If True, wait for a response and return it. Defaults to True.
+            quiet (bool, optional): If True, suppress exceptions and return False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False. False if the operation failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs during the operation and `quiet` is False.
+        """
+        try:
+            self.send_json_command(
+                "lli",
+                {
+                    "CONM": 175,
+                    "RTM": 24,
+                    "ID": 0,
+                    "PL": 1,
+                    "NOM": name,
+                    "PW": password,
+                    "LT": None,
+                    "LANG": "fr",
+                    "DID": "0",
+                    "AID": "1674256959939529708",
+                    "KID": "",
+                    "REF": "https://empire.goodgamestudios.com",
+                    "GCI": "",
+                    "SID": 9,
+                    "PLFID": 1,
+                },
+            )
+            if sync:
+                response = self.wait_for_json_response("lli")
+                self.raise_for_status(response)
+                return response
+            return True
+        except Exception as e:
+            if not quiet:
+                raise e
+            return False
+
     def login_facebook(
         self,
         facebook_id: str,

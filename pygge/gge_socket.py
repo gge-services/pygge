@@ -324,5 +324,4 @@ class GgeSocket(
         Raises:
             Exception: If an error occurs during the operation and `quiet` is False.
         """
-        token = self.generate_recaptcha_token(quiet=quiet)
-        self.login_with_recaptcha_token(name, password, token, sync=sync, quiet=quiet)
+        self.login_without_recaptcha_token(name, password, sync=sync, quiet=quiet)
