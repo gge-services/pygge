@@ -34,6 +34,7 @@ from .events.imperial_patronage import ImperialPatronage
 from .events.lucky_wheel import LuckyWheel
 from .events.mercenary_camp import MercenaryCamp
 from .events.outer_realms import OuterRealms
+from .events.storm_islands import StormIslands
 from .events.technicus import Technicus
 from .events.wishing_well import WishingWell
 
@@ -96,6 +97,7 @@ class GgeSocket(
     LuckyWheel,
     MercenaryCamp,
     OuterRealms,
+    StormIslands,
     Technicus,
     WishingWell,
     Tavern,
