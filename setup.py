@@ -4,7 +4,7 @@ with open("requirements.txt", "r") as f:
     requirements = f.read().splitlines()
 
 setup(
-    name="pygge",
+    name="pygge-fear",
     version="2.2.5",
     description="A Python library for interacting with GoodGame Empire API.",
     author="danadum",

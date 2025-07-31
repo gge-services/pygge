@@ -1,6 +1,6 @@
 __pycache__
 dist
 build
-pygge.egg-info
+pygge*.egg-info
 pygge-*
 venv
