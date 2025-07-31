@@ -7,6 +7,7 @@ The `Auth` class provides methods for checking the availability of usernames, re
 from ..base_gge_socket import BaseGgeSocket
 
 import requests
+import random
 
 
 class Auth(BaseGgeSocket):
@@ -111,63 +112,11 @@ class Auth(BaseGgeSocket):
                 return response
         return response
 
-    def login_with_recaptcha_token(
+    def login(
         self, name: str, password: str, recaptcha_token: str, sync: bool = True, quiet: bool = False
     ) -> dict | bool:
         """
-        Log in to an account with a reCAPTCHA token.
-
-        Args:
-            name (str): The username to log in with.
-            password (str): The password to log in with.
-            recaptcha_token (str): The reCAPTCHA token to verify the login.
-            sync (bool, optional): If True, wait for a response and return it. Defaults to True.
-            quiet (bool, optional): If True, suppress exceptions and return False on failure. Defaults to False.
-
-        Returns:
-            dict: The response from the server if `sync` is True.
-            bool: True if the operation was successful and `sync` is False. False if the operation failed and `quiet` is True.
-
-        Raises:
-            Exception: If an error occurs during the operation and `quiet` is False.
-        """
-        try:
-            self.send_json_command(
-                "lli",
-                {
-                    "CONM": 175,
-                    "RTM": 24,
-                    "ID": 0,
-                    "PL": 1,
-                    "NOM": name,
-                    "PW": password,
-                    "LT": None,
-                    "LANG": "fr",
-                    "DID": "0",
-                    "AID": "1674256959939529708",
-                    "KID": "",
-                    "REF": "https://empire.goodgamestudios.com",
-                    "GCI": "",
-                    "SID": 9,
-                    "PLFID": 1,
-                    "RCT": recaptcha_token,
-                },
-            )
-            if sync:
-                response = self.wait_for_json_response("lli")
-                self.raise_for_status(response)
-                return response
-            return True
-        except Exception as e:
-            if not quiet:
-                raise e
-            return False
-
-    def login_without_recaptcha_token(
-        self, name: str, password: str, sync: bool = True, quiet: bool = False
-    ) -> dict | bool:
-        """
-        Log in to an account without a reCAPTCHA token.
+        Log in to an account.
 
         Args:
             name (str): The username to log in with.
@@ -184,27 +133,28 @@ class Auth(BaseGgeSocket):
         """
         try:
             self.send_json_command(
-                "lli",
-                {
-                    "CONM": 175,
-                    "RTM": 24,
-                    "ID": 0,
-                    "PL": 1,
-                    "NOM": name,
-                    "PW": password,
-                    "LT": None,
-                    "LANG": "fr",
-                    "DID": "0",
-                    "AID": "1674256959939529708",
-                    "KID": "",
-                    "REF": "https://empire.goodgamestudios.com",
-                    "GCI": "",
-                    "SID": 9,
-                    "PLFID": 1,
-                },
+            "lli",
+            {
+                "CONM": random.randint(171, 246),
+                "RTM": random.randint(21, 36),
+                "ID": 0,
+                "PL": 1,
+                "NOM": name,
+                "PW": password,
+                "LT": None,
+                "LANG": "en",
+                "DID": "0",
+                "AID": "1739871032088715879",
+                "KID": "",
+                "REF": "https://empire.goodgamestudios.com",
+                "GCI": "",
+                "SID": 9,
+                "PLFID": 1,
+                "RCT": recaptcha_token,
+            },
             )
             if sync:
-                response = self.wait_for_json_response("lli")
+                response = self.wait_for_json_response("lli", timeout=12)
                 self.raise_for_status(response)
                 return response
             return True

@@ -56,6 +56,7 @@ class System(BaseGgeSocket):
         Raises:
             Exception: If an error occurs and `quiet` is False.
         """
+        # print("join_server called with server_header:", self.server_header)
         try:
             self.send_xml_message("sys", "login", "0", 
                 f"<login z='{self.server_header}'><nick><![CDATA[]]></nick><pword><![CDATA[1123010%fr%0]]></pword></login>")
@@ -206,5 +207,22 @@ class System(BaseGgeSocket):
         self.opened.wait()
         while self.opened.is_set():
             closed = self.closed.wait(60)
-            if not closed:
+            if not closed and not getattr(self, 'is_browser_mode', False):
                 self.ping(quiet=quiet)
+
+    def switch_to_bth(self, login_token, sync=True, quiet=False):
+        import threading
+        new_socket = BaseGgeSocket(
+            "wss://ep-live-battle1-game.goodgamestudios.com/",
+            "EmpireEx_45"
+        )
+        threading.Thread(target=new_socket.run_forever, daemon=True).start()
+        new_socket.opened.wait()
+        new_socket.send_xml_message("sys", "autoJoin", "-1", "")
+        if sync:
+            new_socket.wait_for_xml_response("sys", "joinOK", "1")
+        new_socket.send_xml_message("sys", "roundTrip", "1", "")
+        if sync:
+            new_socket.wait_for_xml_response("sys", "roundTripRes", "1")
+        new_socket.send_json_command("tlep", {"TLT": login_token})
+        return new_socket

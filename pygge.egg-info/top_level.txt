@@ -1,14 +1,1 @@
-account
-alliance
-army
-building
-castle
-events
-generals
-gifts
-lords
-map
-misc
-shop
-tutorial
-utils
+pygge

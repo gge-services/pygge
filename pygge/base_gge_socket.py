@@ -53,6 +53,8 @@ class BaseGgeSocket(websocket.WebSocketApp):
         Returns:
             None
         """
+        # print(f"BaseGgeSocket initialized with url: {url}")
+        # print(f"BaseGgeSocket initialized with server_header: {server_header}")
         super().__init__(
             url,
             on_open=self.__onopen,
@@ -62,6 +64,7 @@ class BaseGgeSocket(websocket.WebSocketApp):
             *args,
             **kwargs,
         )
+        self.send_lock = threading.Lock()
         self.server_header = server_header
         """ str: The server header to use. """
         self.__on_send = on_send
@@ -80,6 +83,18 @@ class BaseGgeSocket(websocket.WebSocketApp):
         """ threading.Event: An event that is set when the connection is closed. """
         self.__messages: list[dict] = []
         """ list[dict]: Internal list of messages waiting for a response. """
+        
+        # Error handling system
+        self.error_thresholds = {
+            91: 1,    # invalid army request 
+            90: 4,    # cant start new armies
+            95: 5,    # cooling down
+            256: 5,   # commander is used
+            311: 50,  # not cooling down
+            313: 5    # attack too many units
+        }
+        self.error_counts = {error_code: 0 for error_code in self.error_thresholds}
+        self.error_lock = threading.Lock()
 
     def __onopen(self, ws: websocket.WebSocketApp) -> None:
         """
@@ -153,8 +168,9 @@ class BaseGgeSocket(websocket.WebSocketApp):
         Returns:
             None
         """
-        self.__on_send and self.__on_send(self, data)
-        super().send(data, *args, **kwargs)
+        with self.send_lock:
+            self.__on_send and self.__on_send(self, data)
+            super().send(data, *args, **kwargs)
 
     def __send_command_message(self, data: list[str]) -> None:
         """
@@ -192,8 +208,11 @@ class BaseGgeSocket(websocket.WebSocketApp):
         Returns:
             None
         """
+        # self.__send_command_message(
+        #     ["xt", self.server_header, command, "1", json.dumps(data)]
+        # )
         self.__send_command_message(
-            ["xt", self.server_header, command, "1", json.dumps(data)]
+            ["xt", self.server_header, command, "1", json.dumps(data, separators=(',', ':'))]
         )
 
     def send_xml_message(self, t: str, action: str, r: str, data: str) -> None:
@@ -212,7 +231,7 @@ class BaseGgeSocket(websocket.WebSocketApp):
         self.send(f"<msg t='{t}'><body action='{action}' r='{r}'>{data}</body></msg>")
 
     def __wait_for_response(
-        self, type: str, conditions: dict, timeout: int = 5, count: int = 1
+        self, type: str, conditions: dict, timeout: int = 5
     ) -> dict:
         """
         Internal function which waits for a response with the specified type and conditions.
@@ -221,11 +240,9 @@ class BaseGgeSocket(websocket.WebSocketApp):
             type (str): The expected type of the response.
             conditions (dict): The expected conditions of the response.
             timeout (int, optional): The timeout to wait for the response. Defaults to 5.
-            count (int, optional): The number of expected responses. Defaults to 1. -1 or 0 for infinite.
 
         Returns:
-            dict: The response if count is 1.
-            list[dict]: The list of responses if count is greater than 1.
+            dict: The response.
 
         Raises:
             TimeoutError: If the response is not received within the timeout.
@@ -234,29 +251,19 @@ class BaseGgeSocket(websocket.WebSocketApp):
         message = {
             "type": type,
             "conditions": conditions,
-            "responses": [],
+            "response": None,
             "event": event,
         }
         self.__messages.append(message)
         result = event.wait(timeout)
-        if count != 1 and result:
-            while True:
-                event.clear()
-                result = event.wait(0.1)
-                if not result or len(message["responses"]) == count:
-                    result = True
-                    break
         self.__messages.remove(message)
         if not result:
             raise TimeoutError("Timeout waiting for response")
-        if count == 1:
-            response = message["responses"][0]
-        else:
-            response = message["responses"]
+        response = message["response"]
         return response
 
     def wait_for_json_response(
-        self, command: str, data: dict | bool = False, timeout: int = 5, count: int = 1
+        self, command: str, data: dict | bool = False, timeout: int = 5
     ) -> dict:
         """
         Waits for a JSON response with the specified command and data.
@@ -265,21 +272,19 @@ class BaseGgeSocket(websocket.WebSocketApp):
             command (str): The expected command of the response.
             data (dict, optional): The expected data of the response. Defaults to False.
             timeout (int, optional): The timeout to wait for the response. Defaults to 5.
-            count (int, optional): The number of expected responses. Defaults to 1. -1 or 0 for infinite.
 
         Returns:
-            dict: The response if count is 1.
-            list[dict]: The list of responses if count is greater than 1.
+            dict: The response.
 
         Raises:
             TimeoutError: If the response is not received within the timeout.
         """
         return self.__wait_for_response(
-            "json", {"command": command, "data": data}, timeout=timeout, count=count
+            "json", {"command": command, "data": data}, timeout=timeout
         )
 
     def wait_for_xml_response(
-        self, t: str, action: str, r: str, timeout: int = 5, count: int = 1
+        self, t: str, action: str, r: str, timeout: int = 5
     ) -> dict:
         """
         Waits for an XML response with the specified t, action, and r attributes.
@@ -289,11 +294,9 @@ class BaseGgeSocket(websocket.WebSocketApp):
             action (str): The expected action attribute of the response.
             r (str): The expected r attribute of the response.
             timeout (int, optional): The timeout to wait for the response. Defaults to 5.
-            count (int, optional): The number of expected responses. Defaults to 1. -1 or 0 for infinite.
 
         Returns:
-            dict: The response if count is 1.
-            list[dict]: The list of responses if count is greater than 1.
+            dict: The response.
 
         Raises:
             TimeoutError: If the response is not received within the timeout.
@@ -306,7 +309,6 @@ class BaseGgeSocket(websocket.WebSocketApp):
                 "r": r,
             },
             timeout=timeout,
-            count=count,
         )
 
     def raise_for_status(self, response: dict, expected_status: int = 0) -> None:
@@ -355,7 +357,7 @@ class BaseGgeSocket(websocket.WebSocketApp):
             }
         else:
             response = response.strip("%").split("%")
-            response = {
+            parsed_response = {
                 "type": "json",
                 "payload": {
                     "command": response[1],
@@ -363,11 +365,17 @@ class BaseGgeSocket(websocket.WebSocketApp):
                     "data": "%".join(response[4:]) if len(response) > 4 else None,
                 },
             }
-            if response["payload"]["data"] and response["payload"]["data"].startswith(
+            if parsed_response["payload"]["data"] and parsed_response["payload"]["data"].startswith(
                 "{"
             ):
-                response["payload"]["data"] = json.loads(response["payload"]["data"])
-            return response
+                parsed_response["payload"]["data"] = json.loads(parsed_response["payload"]["data"])
+            
+            # Check for error status codes
+            status = parsed_response["payload"]["status"]
+            if status != 0:
+                self._handle_error_status(status, parsed_response["payload"]["command"])
+            
+            return parsed_response
 
     def __process_response(self, response: dict) -> None:
         """
@@ -381,7 +389,7 @@ class BaseGgeSocket(websocket.WebSocketApp):
         """
         for message in self.__messages:
             if self.__compare_response(response, message):
-                message["responses"].append(response)
+                message["response"] = response
                 message["event"].set()
                 break
 
@@ -426,4 +434,60 @@ class BaseGgeSocket(websocket.WebSocketApp):
                 if key not in response or response[key] != message[key]:
                     return False
         return True
+
+    def _handle_error_status(self, status_code: int, command: str = None):
+        """
+        Handles error status codes with weighted counting and threshold-based termination.
+        
+        Args:
+            status_code (int): The error status code
+            command (str, optional): The command that caused the error
+        """
+        if status_code in self.error_thresholds:
+            with self.error_lock:
+                self.error_counts[status_code] += 1
+                current_count = self.error_counts[status_code]
+                threshold = self.error_thresholds[status_code]
+                
+                error_message = f"Error {status_code} occurred ({current_count}/{threshold})"
+                if command:
+                    error_message += f" in command '{command}'"
+                
+                print(f"[ERROR HANDLER] {error_message}")
+                
+                if current_count >= threshold:
+                    self._terminate_bot_process(status_code, current_count)
+
+    def _terminate_bot_process(self, status_code: int, count: int):
+        """
+        Terminates the bot process when error threshold is reached.
+        
+        Args:
+            status_code (int): The error code that caused termination
+            count (int): The number of times this error occurred
+        """
+        import sys
+        import os
+        
+        termination_message = f"CRITICAL: Bot terminated due to error {status_code} occurring {count} times (threshold reached)"
+        print(f"[BOT TERMINATION] {termination_message}")
+        
+        # Try to gracefully close the connection
+        try:
+            self.close()
+        except:
+            pass
+        
+        # Terminate the process
+        os._exit(1)
+
+    def get_error_statistics(self):
+        """
+        Returns current error statistics.
+        
+        Returns:
+            dict: Dictionary with error codes as keys and their counts as values
+        """
+        with self.error_lock:
+            return self.error_counts.copy()
 

@@ -11,7 +11,6 @@ from .account.friends import Friends
 from .account.settings import Settings
 
 from .alliance.help import Help
-from .alliance.chat import Chat
 
 from .army.hospital import Hospital
 from .army.soldiers import Soldiers
@@ -34,7 +33,6 @@ from .events.imperial_patronage import ImperialPatronage
 from .events.lucky_wheel import LuckyWheel
 from .events.mercenary_camp import MercenaryCamp
 from .events.outer_realms import OuterRealms
-from .events.storm_islands import StormIslands
 from .events.technicus import Technicus
 from .events.wishing_well import WishingWell
 
@@ -63,7 +61,6 @@ from .shop.specialist import Specialist
 from .tutorial.tutorial import Tutorial
 
 from .utils.system import System
-from .utils.recaptcha import Recaptcha
 
 from .misc.build_items import BuildItems
 from .misc.global_effects import GlobalEffects
@@ -78,7 +75,6 @@ class GgeSocket(
     Friends,
     Settings,
     Help,
-    Chat,
     Hospital,
     Soldiers,
     Tools,
@@ -97,7 +93,6 @@ class GgeSocket(
     LuckyWheel,
     MercenaryCamp,
     OuterRealms,
-    StormIslands,
     Technicus,
     WishingWell,
     Tavern,
@@ -119,7 +114,6 @@ class GgeSocket(
     Specialist,
     Tutorial,
     System,
-    Recaptcha,
     BuildItems,
     GlobalEffects,
     Quests,
@@ -306,24 +300,3 @@ class GgeSocket(
         self.get_offerings_status(sync=sync, quiet=quiet)
         self.complete_quest_condition(1, "visitGeneralsInn", sync=sync, quiet=quiet)
         self.skip_generals_intro(sync=sync, quiet=quiet)
-
-    def login(
-        self, name: str, password: str, sync: bool = True, quiet: bool = False
-    ) -> dict | bool:
-        """
-        Log in to an account.
-
-        Args:
-            name (str): The username to log in with.
-            password (str): The password to log in with.
-            sync (bool, optional): If True, wait for a response and return it. Defaults to True.
-            quiet (bool, optional): If True, suppress exceptions and return False on failure. Defaults to False.
-
-        Returns:
-            dict: The response from the server if `sync` is True.
-            bool: True if the operation was successful and `sync` is False. False if the operation failed and `quiet` is True.
-
-        Raises:
-            Exception: If an error occurs during the operation and `quiet` is False.
-        """
-        self.login_without_recaptcha_token(name, password, sync=sync, quiet=quiet)
