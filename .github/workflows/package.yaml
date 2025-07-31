@@ -1,0 +1,32 @@
+name: Publish Python Package 🚀
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  package:
+    name: Publish Python Package 🚀
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout 🛎️
+      uses: actions/checkout@v4
+
+    - name: Set up Python 🔧
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install build dependencies 📦
+      run: pip install setuptools wheel twine
+
+    - name: Build package 🏗️
+      run: python setup.py sdist bdist_wheel
+
+    - name: Publish Python Package 🚀
+      env:
+        TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
+      run: python -m twine upload dist/*
