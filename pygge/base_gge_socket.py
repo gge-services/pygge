@@ -84,14 +84,33 @@ class BaseGgeSocket(websocket.WebSocketApp):
         self.__messages: list[dict] = []
         """ list[dict]: Internal list of messages waiting for a response. """
         
-        # Error handling system
+        self.exempt_commands = {"rlu"}
+        """ set[str]: Commands that are exempt from error handling and termination. """
+        
         self.error_thresholds = {
+            1: 1,     # general error
+            2: 1,     # invalid parameter value
+            3: 1,     # missing parameter
+            4: 1,     # invalid wod id
+            5: 1,     # invalid object id
+            6: 1,     # invalid position
+            10: 1,    # not enough coins
+            11: 1,    # not enough rubies
+            55: 1,    # not enough resources
+            63: 2,    # no free construction slot
+            88: 1,    # too many units
+            90: 2,    # cant start new armies
             91: 1,    # invalid army request 
-            90: 4,    # cant start new armies
-            95: 5,    # cooling down
-            256: 5,   # commander is used
+            95: 3,    # cooling down
+            105: 1,   # not enough spies
+            101: 1,   # missing units
+            203: 2,   # invalid area
+            256: 4,   # commander is used
+            308: 1,   # not enough silver runes
+            309: 1,   # not enough gold runes
             311: 50,  # not cooling down
-            313: 5    # attack too many units
+            313: 1,   # attack too many units
+            327: 2,   # not enough special currency
         }
         self.error_counts = {error_code: 0 for error_code in self.error_thresholds}
         self.error_lock = threading.Lock()
@@ -370,9 +389,10 @@ class BaseGgeSocket(websocket.WebSocketApp):
             ):
                 parsed_response["payload"]["data"] = json.loads(parsed_response["payload"]["data"])
             
-            # Check for error status codes
+            # Check for error status codes (ignore codes > 500)
             status = parsed_response["payload"]["status"]
-            if status != 0:
+            if status != 0 and status <= 500:
+                self.log_error_message(status, parsed_response["payload"]["command"], parsed_response["payload"].get("data"))
                 self._handle_error_status(status, parsed_response["payload"]["command"])
             
             return parsed_response
@@ -435,6 +455,25 @@ class BaseGgeSocket(websocket.WebSocketApp):
                     return False
         return True
 
+    def log_error_message(self, status_code: int, command: str = None, data: dict = None):
+        """
+        Logs the incoming error message with status code.
+        
+        Args:
+            status_code (int): The error status code
+            command (str, optional): The command that caused the error
+            data (dict, optional): Additional data from the response
+        """
+        log_message = f"[ERROR {status_code}] Incoming message:"
+        
+        if command:
+            log_message += f" Command: {command}"
+        
+        if data:
+            log_message += f" | Data: {data}"
+        
+        print(log_message)
+
     def _handle_error_status(self, status_code: int, command: str = None):
         """
         Handles error status codes with weighted counting and threshold-based termination.
@@ -443,6 +482,15 @@ class BaseGgeSocket(websocket.WebSocketApp):
             status_code (int): The error status code
             command (str, optional): The command that caused the error
         """
+        # Ignore error codes greater than 500
+        if status_code > 500:
+            return
+            
+        # Check if command is exempt from error handling
+        if command and command in self.exempt_commands:
+            print(f"[ERROR HANDLER] Command '{command}' is exempt from error handling (Error {status_code})")
+            return
+            
         if status_code in self.error_thresholds:
             with self.error_lock:
                 self.error_counts[status_code] += 1
