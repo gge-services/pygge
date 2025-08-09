@@ -13,7 +13,7 @@ class WishingWell(BaseGgeSocket):
     This class provides a method to upgrade the Wishing Well.
     """
 
-    def upgrade_wishing_well(self, sync=True, quiet=False):
+    def upgrade_wishing_well(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Upgrade the Wishing Well.
 

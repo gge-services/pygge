@@ -13,7 +13,7 @@ class Lords(BaseGgeSocket):
     This class provides a method to retrieve information about lords.
     """
 
-    def get_lords(self, sync=True, quiet=False):
+    def get_lords(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Retrieve a list of lords.
 

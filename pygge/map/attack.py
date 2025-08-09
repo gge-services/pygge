@@ -18,22 +18,22 @@ class Attack(BaseGgeSocket):
 
     def send_attack(
         self,
-        kingdom,
-        sx,
-        sy,
-        tx,
-        ty,
-        army,
-        lord_id=0,
-        horses_type=-1,
-        feathers=0,
-        slowdown=0,
-        boosters=[],
-        support_tools=[],
-        final_wave=[],
-        sync=True,
-        quiet=False,
-    ):
+        kingdom: int,
+        sx: int,
+        sy: int,
+        tx: int,
+        ty: int,
+        army: list,
+        lord_id: int = 0,
+        horses_type: int = -1,
+        feathers: int = 0,
+        slowdown: int = 0,
+        boosters: list = [],
+        support_tools: list = [],
+        final_wave: list = [],
+        sync: bool = True,
+        quiet: bool = False,
+    ) -> dict | bool:
         """
         Send an attack to a target location.
 
@@ -99,7 +99,7 @@ class Attack(BaseGgeSocket):
                 raise e
             return False
 
-    def get_presets(self, sync=True, quiet=False):
+    def get_presets(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Get the attack presets.
 
@@ -126,7 +126,7 @@ class Attack(BaseGgeSocket):
                 raise e
             return False
 
-    def time_skip_npc_cooldown(self, kingdom, tx, ty, time_skip, sync=True, quiet=False):
+    def time_skip_npc_cooldown(self, kingdom: int, tx: int, ty: int, time_skip: str, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Skip the cooldown for the next attack using a time skip.
 
@@ -157,7 +157,7 @@ class Attack(BaseGgeSocket):
                 raise e
             return False
 
-    def paid_skip_npc_cooldown(self, kingdom, tx, ty, sync=True, quiet=False):
+    def paid_skip_npc_cooldown(self, kingdom: int, tx: int, ty: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Skip the cooldown for the next attack using rubies.
 

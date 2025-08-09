@@ -15,7 +15,7 @@ class ImperialPatronage(BaseGgeSocket):
     resources or tokens as part of the system.
     """
 
-    def open_imperail_patronage(self, sync=True, quiet=False):
+    def open_imperail_patronage(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Open the Imperial Patronage menu.
 
@@ -42,7 +42,7 @@ class ImperialPatronage(BaseGgeSocket):
                 raise e
             return False
 
-    def give_imperial_patronage(self, devise_id, amount, sync=True, quiet=False):
+    def give_imperial_patronage(self, devise_id: int, amount: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Donate resources or tokens to the Imperial Patronage system.
 

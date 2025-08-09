@@ -13,7 +13,7 @@ class BeyondTheHorizon(BaseGgeSocket):
     This class provides methods for retrieving event points, selecting a castle, obtaining tokens, and logging into the event.
     """
 
-    def get_bth_points(self, sync=True, quiet=False):
+    def get_bth_points(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Retrieve the player's Beyond the Horizon event points.
 
@@ -40,7 +40,7 @@ class BeyondTheHorizon(BaseGgeSocket):
                 raise e
             return False
 
-    def choose_bth_castle(self, castle_id, only_rubies=0, use_rubies=0, sync=True, quiet=False):
+    def choose_bth_castle(self, castle_id: int, only_rubies: int = 0, use_rubies: int = 0, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Select a castle for the Beyond the Horizon event.
 
@@ -75,7 +75,7 @@ class BeyondTheHorizon(BaseGgeSocket):
                 raise e
             return False
 
-    def get_bth_token(self, sync=True, quiet=False):
+    def get_bth_token(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Retrieve the Beyond the Horizon event token.
 
@@ -104,7 +104,7 @@ class BeyondTheHorizon(BaseGgeSocket):
                 raise e
             return False
 
-    def login_bth(self, token, sync=True, quiet=False):
+    def login_bth(self, token: str, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Log in to the Beyond the Horizon event using a token.
 

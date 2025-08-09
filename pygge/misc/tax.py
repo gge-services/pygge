@@ -15,7 +15,7 @@ class Tax(BaseGgeSocket):
     and collect accumulated taxes.
     """
 
-    def get_tax_infos(self, sync=True, quiet=False):
+    def get_tax_infos(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Retrieve tax-related information.
 
@@ -42,7 +42,7 @@ class Tax(BaseGgeSocket):
                 raise e
             return False
 
-    def start_tax(self, tax_type, sync=True, quiet=False):
+    def start_tax(self, tax_type: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Start a tax collection process.
 
@@ -73,7 +73,7 @@ class Tax(BaseGgeSocket):
                 raise e
             return False
 
-    def collect_tax(self, sync=True, quiet=False):
+    def collect_tax(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Collect the accumulated tax.
 

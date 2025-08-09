@@ -18,19 +18,19 @@ class Spy(BaseGgeSocket):
 
     def send_spy(
         self,
-        kingdom,
-        source_id,
-        tx,
-        ty,
-        spy_count=1,
-        precision=50,
-        spy_type=0,
-        horses_type=-1,
-        feathers=0,
-        slowdown=0,
-        sync=True,
-        quiet=False,
-    ):
+        kingdom: int,
+        source_id: int,
+        tx: int,
+        ty: int,
+        spy_count: int = 1,
+        precision: int = 50,
+        spy_type: int = 0,
+        horses_type: int = -1,
+        feathers: int = 0,
+        slowdown: int = 0,
+        sync: bool = True,
+        quiet: bool = False,
+    ) -> dict | bool:
         """
         Send spies to a target location for reconnaissance.
 

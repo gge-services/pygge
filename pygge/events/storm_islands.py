@@ -13,7 +13,7 @@ class StormIslands(BaseGgeSocket):
     This class provides methods for interacting with the Storm Islands.
     """
 
-    def get_alliance_plunder_ranking(self, alliance_id, sync=True, quiet=False):
+    def get_alliance_plunder_ranking(self, alliance_id: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Get the plunder ranking for the Storm Islands.
 

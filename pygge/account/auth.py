@@ -272,7 +272,7 @@ class Auth(BaseGgeSocket):
                 raise e
             return False
 
-    def ask_password_recovery(self, email, sync=True, quiet=False):
+    def ask_password_recovery(self, email: str, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Ask for password recovery.
 

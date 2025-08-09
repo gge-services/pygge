@@ -13,7 +13,7 @@ class Gifts(BaseGgeSocket):
     This class provides a method to send gifts to other players.
     """
 
-    def send_gift(self, target_id, package_type, amount, sync=True, quiet=False):
+    def send_gift(self, target_id: int, package_type: int, amount: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Send a gift to another player.
 

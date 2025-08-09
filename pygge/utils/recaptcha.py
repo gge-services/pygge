@@ -18,7 +18,7 @@ class Recaptcha(BaseGgeSocket):
     This class provides a method for generating a RECAPTCHA token for the game.
     """
 
-    def generate_recaptcha_token(self, quiet=False):
+    def generate_recaptcha_token(self, quiet: bool = False) -> str | bool:
         """
         Generate a RECAPTCHA token using Selenium.
 

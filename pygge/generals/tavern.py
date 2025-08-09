@@ -13,7 +13,7 @@ class Tavern(BaseGgeSocket):
     This class provides a method to retrieve the status of current offerings.
     """
 
-    def get_offerings_status(self, sync=True, quiet=False):
+    def get_offerings_status(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Retrieve the status of current offerings in the Tavern.
 
@@ -40,7 +40,7 @@ class Tavern(BaseGgeSocket):
                 raise e
             return False
 
-    def make_offering(self, character_id, offering_id, free_offering=1, sync=True, quiet=False):
+    def make_offering(self, character_id: int, offering_id: int, free_offering: int = 1, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Make an offering at the Tavern.
 

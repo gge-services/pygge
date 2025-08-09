@@ -15,7 +15,7 @@ class MercenaryCamp(BaseGgeSocket):
     refreshing missions, starting missions, skipping missions, and collecting rewards.
     """
 
-    def get_mercenary_missions(self, sync=True, quiet=False):
+    def get_mercenary_missions(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Retrieve available mercenary missions.
 
@@ -44,7 +44,7 @@ class MercenaryCamp(BaseGgeSocket):
                 raise e
             return False
 
-    def refresh_mercenary_mission(self, mission_id, sync=True, quiet=False):
+    def refresh_mercenary_mission(self, mission_id: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Refresh a specific mercenary mission.
 
@@ -74,7 +74,7 @@ class MercenaryCamp(BaseGgeSocket):
                 raise e
             return False
 
-    def start_mercenary_mission(self, mission_id, sync=True, quiet=False):
+    def start_mercenary_mission(self, mission_id: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Start a mercenary mission.
 
@@ -104,7 +104,7 @@ class MercenaryCamp(BaseGgeSocket):
                 raise e
             return False
 
-    def skip_mercenary_mission(self, mission_id, sync=True, quiet=False):
+    def skip_mercenary_mission(self, mission_id: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Skip a mercenary mission.
 
@@ -134,7 +134,7 @@ class MercenaryCamp(BaseGgeSocket):
                 raise e
             return False
 
-    def collect_mercenary_mission(self, mission_id, sync=True, quiet=False):
+    def collect_mercenary_mission(self, mission_id: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Collect rewards from a completed mercenary mission.
 

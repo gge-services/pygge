@@ -14,7 +14,7 @@ class Bookmarks(BaseGgeSocket):
     This class provides methods to retrieve a player's saved bookmarks.
     """
 
-    def get_bookmarks(self, sync=True, quiet=False):
+    def get_bookmarks(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Retrieve the player's saved bookmarks.
 

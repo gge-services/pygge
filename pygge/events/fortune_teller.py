@@ -13,7 +13,7 @@ class FortuneTeller(BaseGgeSocket):
     This class provides methods for interacting with the Fortune Teller.
     """
 
-    def make_divination(self, sync=True, quiet=False):
+    def make_divination(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Make a divination at the Fortune Teller.
         Args:

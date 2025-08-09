@@ -15,7 +15,7 @@ class DailyGifts(BaseGgeSocket):
     and alliance gifts.
     """
 
-    def collect_daily_gift(self, choice, sync=True, quiet=False):
+    def collect_daily_gift(self, choice: str, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Collect a standard daily gift.
 
@@ -50,7 +50,7 @@ class DailyGifts(BaseGgeSocket):
                 raise e
             return False
 
-    def collect_daily_gift_vip(self, sync=True, quiet=False):
+    def collect_daily_gift_vip(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Collect the VIP daily gift.
 
@@ -81,7 +81,7 @@ class DailyGifts(BaseGgeSocket):
                 raise e
             return False
 
-    def collect_daily_gift_alliance(self, sync=True, quiet=False):
+    def collect_daily_gift_alliance(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Collect the alliance daily gift.
 

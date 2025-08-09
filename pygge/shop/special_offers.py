@@ -15,7 +15,7 @@ class SpecialOffers(BaseGgeSocket):
     gifts associated with special offers.
     """
 
-    def buy_special_offer(self, offer_id, package_ids=[0], sync=True, quiet=False):
+    def buy_special_offer(self, offer_id: int, package_ids: list[int] = [0], sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase a special offer.
 
@@ -48,7 +48,7 @@ class SpecialOffers(BaseGgeSocket):
                 raise e
             return False
 
-    def collect_special_offer_gift(self, gift_id, sync=True, quiet=False):
+    def collect_special_offer_gift(self, gift_id: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Collect a special offer gift.
 

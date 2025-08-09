@@ -15,7 +15,7 @@ class Tutorial(BaseGgeSocket):
     and skipping the generals' introduction.
     """
 
-    def choose_hero(self, hero_id=802, sync=True, quiet=False):
+    def choose_hero(self, hero_id: int = 802, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Select a hero for the tutorial.
 
@@ -45,7 +45,7 @@ class Tutorial(BaseGgeSocket):
                 raise e
             return False
 
-    def collect_noob_gift(self, sync=True, quiet=False):
+    def collect_noob_gift(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Collect the beginner's gift.
 
@@ -72,7 +72,7 @@ class Tutorial(BaseGgeSocket):
                 raise e
             return False
 
-    def skip_generals_intro(self, sync=True, quiet=False):
+    def skip_generals_intro(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Skip the introduction to generals.
 

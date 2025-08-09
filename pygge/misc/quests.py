@@ -15,7 +15,7 @@ class Quests(BaseGgeSocket):
     track recommended quests, and handle quest conditions.
     """
 
-    def get_quests(self, sync=True, quiet=False):
+    def get_quests(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Retrieve the list of available quests.
 
@@ -44,7 +44,7 @@ class Quests(BaseGgeSocket):
                 raise e
             return False
 
-    def complete_message_quest(self, quest_id, sync=True, quiet=False):
+    def complete_message_quest(self, quest_id: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Complete a message-based quest.
 
@@ -74,7 +74,7 @@ class Quests(BaseGgeSocket):
                 raise e
             return False
 
-    def complete_donation_quest(self, quest_id, food=0, wood=0, stone=0, gold=0, oil=0, coal=0, iron=0, glass=0, sync=True, quiet=False):
+    def complete_donation_quest(self, quest_id: int, food: int = 0, wood: int = 0, stone: int = 0, gold: int = 0, oil: int = 0, coal: int = 0, iron: int = 0, glass: int = 0, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Complete a donation-based quest by contributing specified resources.
 
@@ -122,7 +122,7 @@ class Quests(BaseGgeSocket):
                 raise e
             return False
 
-    def tracking_recommended_quests(self, quiet=False):
+    def tracking_recommended_quests(self, quiet: bool = False) -> bool:
         """
         Track recommended quests.
 
@@ -145,7 +145,7 @@ class Quests(BaseGgeSocket):
                 raise e
             return False
 
-    def complete_quest_condition(self, quest_id, condition, sync=True, quiet=False):
+    def complete_quest_condition(self, quest_id: int, condition: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Complete a specific condition of a quest.
 
@@ -177,7 +177,7 @@ class Quests(BaseGgeSocket):
                 raise e
             return False
 
-    def wait_finish_quest(self, quest_id, timeout=5, quiet=False):
+    def wait_finish_quest(self, quest_id: int, timeout: int = 5, quiet: bool = False) -> dict | bool:
         """
         Wait for a quest to be completed.
 

@@ -15,7 +15,7 @@ class System(BaseGgeSocket):
     automatically joining a session, maintaining connections, and sending system-level commands.
     """
 
-    def ver_check(self, sync=True, quiet=False):
+    def ver_check(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Perform a version check.
 
@@ -41,7 +41,7 @@ class System(BaseGgeSocket):
                 raise e
             return False
 
-    def join_server(self, sync=True, quiet=False):
+    def join_server(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Join the game server.
 
@@ -69,7 +69,7 @@ class System(BaseGgeSocket):
                 raise e
             return False
 
-    def auto_join(self, sync=True, quiet=False):
+    def auto_join(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Automatically join a server session.
 
@@ -95,7 +95,7 @@ class System(BaseGgeSocket):
                 raise e
             return False
 
-    def round_trip(self, sync=True, quiet=False):
+    def round_trip(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Perform a round trip request.
 
@@ -121,7 +121,7 @@ class System(BaseGgeSocket):
                 raise e
             return False
 
-    def vck(self, build_number, sync=True, quiet=False):
+    def vck(self, build_number: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Perform a version check for a specific build number.
 
@@ -149,7 +149,7 @@ class System(BaseGgeSocket):
                 raise e
             return False
 
-    def ping(self, quiet=False):
+    def ping(self, quiet: bool = False) -> bool:
         """
         Send a ping to keep the connection alive.
 
@@ -170,7 +170,7 @@ class System(BaseGgeSocket):
                 raise e
             return False
 
-    def init_socket(self, sync=True, quiet=False):
+    def init_socket(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Initialize the socket connection and join the server.
 
@@ -190,7 +190,7 @@ class System(BaseGgeSocket):
         self.auto_join(sync=sync, quiet=quiet)
         self.round_trip(sync=sync, quiet=quiet)
 
-    def keep_alive(self, quiet=False):
+    def keep_alive(self, quiet: bool = False) -> bool:
         """
         Maintain the connection by sending periodic ping messages.
 

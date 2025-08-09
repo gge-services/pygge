@@ -15,7 +15,7 @@ class ShoppingCart(BaseGgeSocket):
     for different sections.
     """
 
-    def edit_shopping_cart(self, packages_left=[], packages_middle=[], packages_right=[], sync=True, quiet=False):
+    def edit_shopping_cart(self, packages_left: list = [], packages_middle: list = [], packages_right: list = [], sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Modify the shopping cart by selecting packages.
 

@@ -16,7 +16,7 @@ class Specialist(BaseGgeSocket):
     travel maps, tax collectors, and drill instructors.
     """
 
-    def buy_market_carts(self, sync=True, quiet=False):
+    def buy_market_carts(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase market carts.
 
@@ -45,7 +45,7 @@ class Specialist(BaseGgeSocket):
                 raise e
             return False
 
-    def buy_marauder(self, sync=True, quiet=False):
+    def buy_marauder(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase a marauder.
 
@@ -74,7 +74,7 @@ class Specialist(BaseGgeSocket):
                 raise e
             return False
 
-    def buy_overseer(self, resource_type, sync=True, quiet=False):
+    def buy_overseer(self, resource_type: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase an overseer for resource management.
 
@@ -110,7 +110,7 @@ class Specialist(BaseGgeSocket):
                 raise e
             return False
 
-    def buy_travel_maps(self, sync=True, quiet=False):
+    def buy_travel_maps(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase travel maps.
 
@@ -139,7 +139,7 @@ class Specialist(BaseGgeSocket):
                 raise e
             return False
 
-    def buy_tax_collector(self, sync=True, quiet=False):
+    def buy_tax_collector(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase a tax collector.
 
@@ -168,7 +168,7 @@ class Specialist(BaseGgeSocket):
                 raise e
             return False
 
-    def buy_drill_instructor(self, sync=True, quiet=False):
+    def buy_drill_instructor(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase a drill instructor.
 
