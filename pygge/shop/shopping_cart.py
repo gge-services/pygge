@@ -15,14 +15,14 @@ class ShoppingCart(BaseGgeSocket):
     for different sections.
     """
 
-    def edit_shopping_cart(self, packages_left: list = [], packages_middle: list = [], packages_right: list = [], sync: bool = True, quiet: bool = False) -> dict | bool:
+    def edit_shopping_cart(self, packages_left: list[int] = [], packages_middle: list[int] = [], packages_right: list[int] = [], sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Modify the shopping cart by selecting packages.
 
         Args:
-            packages_left (list, optional): List of package IDs to place in the left section of the cart. Defaults to an empty list.
-            packages_middle (list, optional): List of package IDs to place in the middle section of the cart. Defaults to an empty list.
-            packages_right (list, optional): List of package IDs to place in the right section of the cart. Defaults to an empty list.
+            packages_left (list[int], optional): List of package IDs to place in the left section of the cart. Defaults to an empty list.
+            packages_middle (list[int], optional): List of package IDs to place in the middle section of the cart. Defaults to an empty list.
+            packages_right (list[int], optional): List of package IDs to place in the right section of the cart. Defaults to an empty list.
             sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
             quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
 

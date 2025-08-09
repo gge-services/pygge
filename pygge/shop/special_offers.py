@@ -21,7 +21,7 @@ class SpecialOffers(BaseGgeSocket):
 
         Args:
             offer_id (int): The ID of the special offer to purchase.
-            package_ids (list, optional): A list of package IDs included in the offer. Defaults to [0].
+            package_ids (list[int], optional): A list of package IDs included in the offer. Defaults to [0].
             sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
             quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
 

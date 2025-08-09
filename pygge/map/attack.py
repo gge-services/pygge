@@ -23,14 +23,14 @@ class Attack(BaseGgeSocket):
         sy: int,
         tx: int,
         ty: int,
-        army: list,
+        army: list[dict[str, dict[str, list[list[int]]]]],
         lord_id: int = 0,
         horses_type: int = -1,
         feathers: int = 0,
         slowdown: int = 0,
-        boosters: list = [],
-        support_tools: list = [],
-        final_wave: list = [],
+        boosters: list[list[int]] = [],
+        support_tools: list[int] = [],
+        final_wave: list[list[int]] = [],
         sync: bool = True,
         quiet: bool = False,
     ) -> dict | bool:
@@ -43,14 +43,14 @@ class Attack(BaseGgeSocket):
             sy (int): The y-coordinate of the starting position.
             tx (int): The x-coordinate of the target.
             ty (int): The y-coordinate of the target.
-            army (list): The composition of the attacking army.
+            army (list[dict[str, dict[str, list[list[int]]]]]): The composition of the attacking army.
             lord_id (int, optional): The ID of the lord leading the attack. Defaults to 0.
             horses_type (int, optional): The type of horses used (-1 for default). Defaults to -1.
             feathers (int, optional): Whether to use feathers to speed up the attack. Defaults to 0.
             slowdown (int, optional): The amount of slowdown applied. Defaults to 0.
-            boosters (list, optional): List of boosters applied to the attack. Defaults to an empty list.
-            support_tools (list, optional): List of support tools used in the attack. Defaults to an empty list.
-            final_wave (list, optional): The composition of the final wave of the attack. Defaults to an empty list.
+            boosters (list[list[int]], optional): List of boosters applied to the attack. Defaults to an empty list.
+            support_tools (list[int], optional): List of support tools used in the attack. Defaults to an empty list.
+            final_wave (list[list[int]], optional): The composition of the final wave of the attack. Defaults to an empty list.
             sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
             quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
 
