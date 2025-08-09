@@ -327,3 +327,26 @@ class GgeSocket(
             Exception: If an error occurs during the operation and `quiet` is False.
         """
         self.login_without_recaptcha_token(name, password, sync=sync, quiet=quiet)
+    
+    def register(
+        self, name: str, email: str, password: str, sync: bool = True, quiet: bool = False
+    ) -> dict | bool:
+        """
+        Register a new account.
+
+        Args:
+            name (str): The username to register.
+            email (str): The email address to register.
+            password (str): The password to register.
+            sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
+            quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False, False if it failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs and `quiet` is False.
+        """
+        recaptcha_token = self.generate_recaptcha_token()
+        self.register_with_recaptcha_token(name, email, password, recaptcha_token, sync=sync, quiet=quiet)

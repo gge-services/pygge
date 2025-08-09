@@ -35,9 +35,9 @@ class Auth(BaseGgeSocket):
             Exception: If an error occurs during the operation and `quiet` is False.
         """
         try:
-            self.send_json_command("vln", {"NOM": name})
+            self.send_json_command("vpn", {"PN": name})
             if sync:
-                response = self.wait_for_json_response("vln")
+                response = self.wait_for_json_response("vpn")
                 self.raise_for_status(response)
                 return response
             return True
@@ -76,11 +76,11 @@ class Auth(BaseGgeSocket):
                 raise e
             return False
 
-    def register(
+    def register_legacy(
         self, username: str, email: str, password: str, quiet: bool = False
     ) -> dict:
         """
-        Register a new account.
+        Register a new account using the legacy method.
 
         Args:
             username (str): The username to register.
@@ -110,6 +110,146 @@ class Auth(BaseGgeSocket):
             else:
                 return response
         return response
+
+    def register_with_recaptcha_token(
+        self, username: str, email: str, password: str, recaptcha_token: str, sync: bool = True, quiet: bool = False
+    ) -> dict | bool:
+        """
+        Register a new account with a reCAPTCHA token.
+
+        Args:
+            username (str): The username to register.
+            email (str): The email address to register.
+            password (str): The password to register.
+            recaptcha_token (str): The reCAPTCHA token to verify the registration.
+            quiet (bool, optional): If True, suppress exceptions and return False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False, False if it failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs during the operation and `quiet` is False.
+        """
+        try:
+            self.send_json_command(
+                "lre",
+                {
+                    "DID": 0,
+                    "CONM": 175,
+                    "RTM": 24,
+                    "campainPId": -1,
+                    "campainCr": -1,
+                    "campainLP": -1,
+                    "adID": -1,
+                    "timeZone": 14,
+                    "username": username,
+                    "email": email,
+                    "password": password,
+                    "accountId": "1674256959939529708",
+                    "ggsLanguageCode": "en",
+                    "referrer": "https://empire.goodgamestudios.com",
+                    "distributorId": 0,
+                    "connectionTime": 175,
+                    "roundTripTime": 24,
+                    "campaignVars": ";https://empire.goodgamestudios.com;;;;;;-1;-1;;1674256959939529708;380635;;;;;",
+                    "campaignVars_adid": "-1",
+                    "campaignVars_lp": "-1",
+                    "campaignVars_creative": "-1",
+                    "campaignVars_partnerId": "-1",
+                    "campaignVars_websiteId": "380635",
+                    "timezone": 14,
+                    "PN": username,
+                    "PW": password,
+                    "REF": "https://empire.goodgamestudios.com",
+                    "LANG": "en",
+                    "AID": "1674256959939529708",
+                    "GCI": "",
+                    "SID": 9,
+                    "PLFID": 1,
+                    "NID": 1,
+                    "IC": "",
+                    "RCT": recaptcha_token
+                },
+            )
+            if sync:
+                response = self.wait_for_json_response("lre")
+                self.raise_for_status(response)
+                return response
+            return True
+        except Exception as e:
+            if not quiet:
+                raise e
+            return False
+
+    def register_without_recaptcha_token(
+        self, username: str, email: str, password: str, sync: bool = True, quiet: bool = False
+    ) -> dict | bool:
+        """
+        Register a new account without a reCAPTCHA token.
+
+        Args:
+            username (str): The username to register.
+            email (str): The email address to register.
+            password (str): The password to register.
+            quiet (bool, optional): If True, suppress exceptions and return False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False, False if it failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs during the operation and `quiet` is False.
+        """
+        try:
+            self.send_json_command(
+                "lre",
+                {
+                    "DID": 0,
+                    "CONM": 175,
+                    "RTM": 24,
+                    "campainPId": -1,
+                    "campainCr": -1,
+                    "campainLP": -1,
+                    "adID": -1,
+                    "timeZone": 14,
+                    "username": username,
+                    "email": email,
+                    "password": password,
+                    "accountId": "1674256959939529708",
+                    "ggsLanguageCode": "en",
+                    "referrer": "https://empire.goodgamestudios.com",
+                    "distributorId": 0,
+                    "connectionTime": 175,
+                    "roundTripTime": 24,
+                    "campaignVars": ";https://empire.goodgamestudios.com;;;;;;-1;-1;;1674256959939529708;380635;;;;;",
+                    "campaignVars_adid": "-1",
+                    "campaignVars_lp": "-1",
+                    "campaignVars_creative": "-1",
+                    "campaignVars_partnerId": "-1",
+                    "campaignVars_websiteId": "380635",
+                    "timezone": 14,
+                    "PN": username,
+                    "PW": password,
+                    "REF": "https://empire.goodgamestudios.com",
+                    "LANG": "en",
+                    "AID": "1674256959939529708",
+                    "GCI": "",
+                    "SID": 9,
+                    "PLFID": 1,
+                    "NID": 1,
+                    "IC": ""
+                },
+            )
+            if sync:
+                response = self.wait_for_json_response("lre")
+                self.raise_for_status(response)
+                return response
+            return True
+        except Exception as e:
+            if not quiet:
+                raise e
+            return False
 
     def login_with_recaptcha_token(
         self, name: str, password: str, recaptcha_token: str, sync: bool = True, quiet: bool = False
