@@ -70,6 +70,60 @@ class Castle(BaseGgeSocket):
                 raise e
             return False
 
+    def get_castle_resources(self, sync: bool = True, quiet: bool = False) -> dict | bool:
+        """
+        Get the resources of the current castle.
+
+        Args:
+            sync (bool, optional): If True, wait for a response and return it. Defaults to True.
+            quiet (bool, optional): If True, suppress exceptions and return False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False. False if the operation failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs during the operation and `quiet` is False.
+        """
+        try:
+            self.send_json_command("grc", {})
+            if sync:
+                response = self.wait_for_json_response("grc")
+                self.raise_for_status(response)
+                return response
+            return True
+        except Exception as e:
+            if not quiet:
+                raise e
+            return False
+
+    def get_castle_production(self, sync: bool = True, quiet: bool = False) -> dict | bool:
+        """
+        Get the resources production of the current castle.
+
+        Args:
+            sync (bool, optional): If True, wait for a response and return it. Defaults to True.
+            quiet (bool, optional): If True, suppress exceptions and return False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False. False if the operation failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs during the operation and `quiet` is False.
+        """
+        try:
+            self.send_json_command("gpa", {})
+            if sync:
+                response = self.wait_for_json_response("gpa")
+                self.raise_for_status(response)
+                return response
+            return True
+        except Exception as e:
+            if not quiet:
+                raise e
+            return False
+
     def go_to_castle(
         self, kingdom: int, castle_id: int = -1, sync: bool = True, quiet: bool = False
     ) -> dict | bool:
