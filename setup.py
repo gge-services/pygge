@@ -5,7 +5,7 @@ with open("requirements.txt", "r") as f:
 
 setup(
     name="pygge",
-    version="2.2.5",
+    version="2.2.6",
     description="A Python library for interacting with GoodGame Empire API.",
     author="danadum",
     author_email="danadum.empire@gmail.com",
