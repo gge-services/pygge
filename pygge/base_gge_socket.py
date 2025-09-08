@@ -88,7 +88,7 @@ class BaseGgeSocket(websocket.WebSocketApp):
         """ set[str]: Commands that are exempt from error handling and termination. """
         
         self.error_thresholds = {
-            1: 1,     # general error
+            1: 2,     # general error
             2: 1,     # invalid parameter value
             3: 1,     # missing parameter
             4: 1,     # invalid wod id
@@ -350,6 +350,20 @@ class BaseGgeSocket(websocket.WebSocketApp):
         ):
             raise Exception(f"Unexpected status: {response['payload']['status']}")
 
+    def dispatch_raw_message(self, message):
+        """
+        Public method to dispatch messages through the same pipeline as __onmessage.
+        This ensures that temp server messages are properly processed and wait conditions are fulfilled.
+        
+        Args:
+            message (bytes|str): The raw message to dispatch
+        """
+        m = message.decode("UTF-8") if isinstance(message, (bytes, bytearray)) else str(message)
+        response = self.parse_response(m)
+        self.__process_response(response)
+        if self.__on_message:
+            self.__on_message(self, m)
+
     def parse_response(self, response: str) -> dict:
         """
         Parses a response into a dictionary with the type and payload.
@@ -389,12 +403,7 @@ class BaseGgeSocket(websocket.WebSocketApp):
             ):
                 parsed_response["payload"]["data"] = json.loads(parsed_response["payload"]["data"])
             
-            # Check for error status codes (ignore codes > 500)
-            status = parsed_response["payload"]["status"]
-            if status != 0 and status <= 500:
-                self.log_error_message(status, parsed_response["payload"]["command"], parsed_response["payload"].get("data"))
-                self._handle_error_status(status, parsed_response["payload"]["command"])
-            
+            # Note: Error handling is done in __process_response to avoid duplicate processing
             return parsed_response
 
     def __process_response(self, response: dict) -> None:
@@ -407,6 +416,16 @@ class BaseGgeSocket(websocket.WebSocketApp):
         Returns:
             None
         """
+        # Handle error status codes only for JSON responses and only once per WebSocket message
+        if response["type"] == "json":
+            status = response["payload"]["status"]
+            if status != 0 and status <= 500:
+                self.log_error_message(status, response["payload"]["command"], response["payload"].get("data"))
+
+                if response["payload"]["command"] and response["payload"]["command"] not in self.exempt_commands:
+                    self._handle_error_status(status, response["payload"]["command"])
+        
+        # Process waiting messages
         for message in self.__messages:
             if self.__compare_response(response, message):
                 message["response"] = response
@@ -464,6 +483,9 @@ class BaseGgeSocket(websocket.WebSocketApp):
             command (str, optional): The command that caused the error
             data (dict, optional): Additional data from the response
         """
+        if command and command in self.exempt_commands:
+            return
+
         log_message = f"[ERROR {status_code}] Incoming message:"
         
         if command:
@@ -472,7 +494,7 @@ class BaseGgeSocket(websocket.WebSocketApp):
         if data:
             log_message += f" | Data: {data}"
         
-        print(log_message)
+        # print(log_message)
 
     def _handle_error_status(self, status_code: int, command: str = None):
         """
@@ -484,11 +506,6 @@ class BaseGgeSocket(websocket.WebSocketApp):
         """
         # Ignore error codes greater than 500
         if status_code > 500:
-            return
-            
-        # Check if command is exempt from error handling
-        if command and command in self.exempt_commands:
-            print(f"[ERROR HANDLER] Command '{command}' is exempt from error handling (Error {status_code})")
             return
             
         if status_code in self.error_thresholds:

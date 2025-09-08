@@ -204,11 +204,24 @@ class System(BaseGgeSocket):
         Raises:
             Exception: If an error occurs and `quiet` is False.
         """
+        from websocket._exceptions import WebSocketConnectionClosedException
+        
         self.opened.wait()
         while self.opened.is_set():
             closed = self.closed.wait(60)
             if not closed and not getattr(self, 'is_browser_mode', False):
-                self.ping(quiet=quiet)
+                try:
+                    self.ping(quiet=quiet)
+                except WebSocketConnectionClosedException:
+                    # Socket is closed, stop keep alive loop
+                    self.closed.set()
+                    self.opened.clear()
+                    break
+                except Exception as e:
+                    if not quiet:
+                        self.closed.set()
+                        self.opened.clear()
+                        break
 
     def switch_to_bth(self, login_token, sync=True, quiet=False):
         import threading
