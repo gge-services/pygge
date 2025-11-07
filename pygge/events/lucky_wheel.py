@@ -15,7 +15,7 @@ class LuckyWheel(BaseGgeSocket):
     wheel in both classic and premium modes.
     """
 
-    def switch_lucky_wheel_mode(self, sync=True, quiet=False):
+    def switch_lucky_wheel_mode(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Switch the Lucky Wheel mode.
 
@@ -42,7 +42,7 @@ class LuckyWheel(BaseGgeSocket):
                 raise e
             return False
 
-    def spin_lucky_wheel(self, wheel_type, sync=True, quiet=False):
+    def spin_lucky_wheel(self, wheel_type: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Spin the Lucky Wheel.
 
@@ -74,7 +74,7 @@ class LuckyWheel(BaseGgeSocket):
                 raise e
             return False
 
-    def spin_classic_lucky_wheel(self, sync=True, quiet=False):
+    def spin_classic_lucky_wheel(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Spin the Classic Lucky Wheel.
 
@@ -91,7 +91,7 @@ class LuckyWheel(BaseGgeSocket):
         """
         return self.spin_lucky_wheel(0, sync, quiet)
 
-    def spin_paid_lucky_wheel(self, sync=True, quiet=False):
+    def spin_paid_lucky_wheel(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Spin the Paid Lucky Wheel (premium version).
 

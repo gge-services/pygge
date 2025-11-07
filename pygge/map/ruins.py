@@ -15,7 +15,7 @@ class Ruins(BaseGgeSocket):
     request ruin messages.
     """
 
-    def get_ruin_infos(self, x, y, sync=True, quiet=False):
+    def get_ruin_infos(self, x: int, y: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Retrieve information about a specific ruin.
 
@@ -47,7 +47,7 @@ class Ruins(BaseGgeSocket):
                 raise e
             return False
 
-    def ask_ruin_infos_message(self, x, y, sync=True, quiet=False):
+    def ask_ruin_infos_message(self, x: int, y: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Request additional information about a ruin.
 

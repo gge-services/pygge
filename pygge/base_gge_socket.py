@@ -461,7 +461,7 @@ class BaseGgeSocket(websocket.WebSocketApp):
                 return True
         return False
     
-    def __compare_nested_headers(self, message, response):
+    def __compare_nested_headers(self, message: dict | None, response: dict | None) -> bool:
         if message is None or response is None:
             return False
         for key in message:

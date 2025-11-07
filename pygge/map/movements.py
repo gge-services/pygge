@@ -13,7 +13,7 @@ class Movements(BaseGgeSocket):
     This class provides methods for managing movements. It is a subclass of `BaseGgeSocket`.
     """
 
-    def get_movements(self, sync=True, quiet=False):
+    def get_movements(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Get the movements of the player.
 

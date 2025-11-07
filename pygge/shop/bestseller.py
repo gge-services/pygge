@@ -15,7 +15,7 @@ class Bestseller(BaseGgeSocket):
     bestseller ID, package type, and amount.
     """
 
-    def buy_from_bestseller(self, bestseller_id, package_type, amount, sync=True, quiet=False):
+    def buy_from_bestseller(self, bestseller_id: int, package_type: int, amount: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase an item from the Bestseller shop.
 

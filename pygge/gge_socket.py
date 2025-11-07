@@ -300,3 +300,47 @@ class GgeSocket(
         self.get_offerings_status(sync=sync, quiet=quiet)
         self.complete_quest_condition(1, "visitGeneralsInn", sync=sync, quiet=quiet)
         self.skip_generals_intro(sync=sync, quiet=quiet)
+
+    def login(
+        self, name: str, password: str, sync: bool = True, quiet: bool = False
+    ) -> dict | bool:
+        """
+        Log in to an account.
+
+        Args:
+            name (str): The username to log in with.
+            password (str): The password to log in with.
+            sync (bool, optional): If True, wait for a response and return it. Defaults to True.
+            quiet (bool, optional): If True, suppress exceptions and return False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False. False if the operation failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs during the operation and `quiet` is False.
+        """
+        return self.login_with_recaptcha_token(name, password, "testToken", sync=sync, quiet=quiet)
+    
+    def register(
+        self, name: str, email: str, password: str, sync: bool = True, quiet: bool = False
+    ) -> dict | bool:
+        """
+        Register a new account.
+
+        Args:
+            name (str): The username to register.
+            email (str): The email address to register.
+            password (str): The password to register.
+            sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
+            quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
+
+        Returns:
+            dict: The response from the server if `sync` is True.
+            bool: True if the operation was successful and `sync` is False, False if it failed and `quiet` is True.
+
+        Raises:
+            Exception: If an error occurs and `quiet` is False.
+        """
+        recaptcha_token = self.generate_recaptcha_token()
+        self.register_with_recaptcha_token(name, email, password, recaptcha_token, sync=sync, quiet=quiet)

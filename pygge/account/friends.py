@@ -42,8 +42,8 @@ class Friends(BaseGgeSocket):
             return False
 
     def send_email(
-        self, sender_name, target_name, target_email, message, sync=True, quiet=False
-    ):
+        self, sender_name: str, target_name: str, target_email: str, message: str, sync: bool = True, quiet: bool = False
+    ) -> dict | bool:
         """
         Send an email to another player.
 

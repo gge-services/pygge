@@ -15,7 +15,7 @@ class BuildItems(BaseGgeSocket):
     within a given kingdom.
     """
 
-    def equip_build_item(self, kingdom_id, castle_id, building_id, slot_id, item_id, sync=True, quiet=False):
+    def equip_build_item(self, kingdom_id: int, castle_id: int, building_id: int, slot_id: int, item_id: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Equip a build item to a building.
 

@@ -16,7 +16,7 @@ class KingsMarket(BaseGgeSocket):
     purchase production slots, open castle gates, and buy feasts.
     """
 
-    def buy_king_banner(self, sync=True, quiet=False):
+    def buy_king_banner(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase a King’s Banner.
 
@@ -43,7 +43,7 @@ class KingsMarket(BaseGgeSocket):
                 raise e
             return False
 
-    def start_protection(self, duration, sync=True, quiet=False):
+    def start_protection(self, duration: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Activate protection for a specified duration.
 
@@ -77,7 +77,7 @@ class KingsMarket(BaseGgeSocket):
                 raise e
             return False
 
-    def buy_production_slot(self, queue_type, sync=True, quiet=False):
+    def buy_production_slot(self, queue_type: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase an additional production slot.
 
@@ -109,7 +109,7 @@ class KingsMarket(BaseGgeSocket):
                 raise e
             return False
 
-    def open_gates(self, kingdom, castle_id, duration=0, sync=True, quiet=False):
+    def open_gates(self, kingdom: int, castle_id: int, duration: int = 0, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Open castle gates for a specified duration.
 
@@ -145,7 +145,7 @@ class KingsMarket(BaseGgeSocket):
                 raise e
             return False
 
-    def buy_feast(self, kingdom, castle_id, feast_type, sync=True, quiet=False):
+    def buy_feast(self, kingdom: int, castle_id: int, feast_type: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase a feast.
 

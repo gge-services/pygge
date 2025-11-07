@@ -15,7 +15,7 @@ class Events(BaseGgeSocket):
     and selecting event difficulty levels.
     """
 
-    def get_events(self, sync=True, quiet=False):
+    def get_events(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Get the list of events available to the player.
 
@@ -42,7 +42,7 @@ class Events(BaseGgeSocket):
                 raise e
             return False
 
-    def get_event_points(self, event_id, sync=True, quiet=False):
+    def get_event_points(self, event_id: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Retrieve the player's points for a specific event.
 
@@ -72,7 +72,7 @@ class Events(BaseGgeSocket):
                 raise e
             return False
 
-    def get_ranking(self, ranking_type, category=-1, search_value=-1, sync=True, quiet=False):
+    def get_ranking(self, ranking_type: int, category: int = -1, search_value: int = -1, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Retrieve ranking data for a specific event category.
 
@@ -106,7 +106,7 @@ class Events(BaseGgeSocket):
                 raise e
             return False
 
-    def choose_event_difficulty(self, event_id, difficulty_id, premium_unlock=0, sync=True, quiet=False):
+    def choose_event_difficulty(self, event_id: int, difficulty_id: int, premium_unlock: int = 0, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Select a difficulty level for a specific event.
 

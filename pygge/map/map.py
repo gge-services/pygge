@@ -15,7 +15,7 @@ class Map(BaseGgeSocket):
     and fetch information about target locations.
     """
 
-    def get_map_chunk(self, kingdom, x, y, sync=True, quiet=False):
+    def get_map_chunk(self, kingdom: int, x: int, y: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Retrieve a chunk of the world map.
 
@@ -51,7 +51,7 @@ class Map(BaseGgeSocket):
                 raise e
             return False
 
-    def get_closest_npc(self, kingdom, npc_type, min_level=1, max_level=-1, owner_id=-1, sync=True, quiet=False):
+    def get_closest_npc(self, kingdom: int, npc_type: int, min_level: int = 1, max_level: int = -1, owner_id: int = -1, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Locate the closest NPC based on given criteria.
 
@@ -89,7 +89,7 @@ class Map(BaseGgeSocket):
                 raise e
             return False
 
-    def get_target_infos(self, kingdom, sx, sy, tx, ty, sync=True, quiet=False):
+    def get_target_infos(self, kingdom: int, sx: int, sy: int, tx: int, ty: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Retrieve information about a specific target on the map.
 

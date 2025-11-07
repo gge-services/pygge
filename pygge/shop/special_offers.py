@@ -15,13 +15,13 @@ class SpecialOffers(BaseGgeSocket):
     gifts associated with special offers.
     """
 
-    def buy_special_offer(self, offer_id, package_ids=[0], sync=True, quiet=False):
+    def buy_special_offer(self, offer_id: int, package_ids: list[int] = [0], sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase a special offer.
 
         Args:
             offer_id (int): The ID of the special offer to purchase.
-            package_ids (list, optional): A list of package IDs included in the offer. Defaults to [0].
+            package_ids (list[int], optional): A list of package IDs included in the offer. Defaults to [0].
             sync (bool, optional): If True, waits for a response and returns it. Defaults to True.
             quiet (bool, optional): If True, suppresses exceptions and returns False on failure. Defaults to False.
 
@@ -48,7 +48,7 @@ class SpecialOffers(BaseGgeSocket):
                 raise e
             return False
 
-    def collect_special_offer_gift(self, gift_id, sync=True, quiet=False):
+    def collect_special_offer_gift(self, gift_id: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Collect a special offer gift.
 

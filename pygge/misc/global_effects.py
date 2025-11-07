@@ -15,7 +15,7 @@ class GlobalEffects(BaseGgeSocket):
     and upgrade specific effects.
     """
 
-    def get_global_effects(self, sync=True, quiet=False):
+    def get_global_effects(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Retrieve a list of currently active global effects.
 
@@ -42,7 +42,7 @@ class GlobalEffects(BaseGgeSocket):
                 raise e
             return False
 
-    def upgrade_global_effect(self, effect_id, sync=True, quiet=False):
+    def upgrade_global_effect(self, effect_id: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Upgrade a specific global effect.
 

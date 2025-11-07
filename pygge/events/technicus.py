@@ -14,7 +14,7 @@ class Technicus(BaseGgeSocket):
     This class provides a method to upgrade equipment, allowing optional premium enhancements.
     """
 
-    def upgrade_equipment_technicus(self, equipment_id, premium=0, sync=True, quiet=False):
+    def upgrade_equipment_technicus(self, equipment_id: int, premium: int = 0, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Upgrade equipment using the Technicus.
 

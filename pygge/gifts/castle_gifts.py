@@ -15,7 +15,7 @@ class CastleGifts(BaseGgeSocket):
     and gather resource gifts.
     """
 
-    def collect_citizen_gift(self, sync=True, quiet=False):
+    def collect_citizen_gift(self, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Collect a citizen gift.
 
@@ -42,7 +42,7 @@ class CastleGifts(BaseGgeSocket):
                 raise e
             return False
 
-    def collect_citizen_quest(self, choice, sync=True, quiet=False):
+    def collect_citizen_quest(self, choice: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Collect a reward from a citizen quest.
 
@@ -72,7 +72,7 @@ class CastleGifts(BaseGgeSocket):
                 raise e
             return False
 
-    def collect_ressource_gift(self, resource_type, sync=True, quiet=False):
+    def collect_ressource_gift(self, resource_type: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Collect a resource gift.
 

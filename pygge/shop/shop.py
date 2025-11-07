@@ -16,7 +16,7 @@ class Shop(BaseGgeSocket):
     VIP time, VIP points, blacksmith items, armorer gear, and more.
     """
 
-    def buy_package_generic(self, kingdom, shop_type, shop_id, package_id, amount, sync=True, quiet=False):
+    def buy_package_generic(self, kingdom: int, shop_type: int, shop_id: int, package_id: int, amount: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase a package from a specified shop.
 
@@ -59,7 +59,7 @@ class Shop(BaseGgeSocket):
                 raise e
             return False
 
-    def buy_vip_time(self, kingdom, package_id, amount, sync=True, quiet=False):
+    def buy_vip_time(self, kingdom: int, package_id: int, amount: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase VIP time.
 
@@ -82,7 +82,7 @@ class Shop(BaseGgeSocket):
         """
         return self.buy_package_generic(kingdom, 2, -1, package_id, amount, sync, quiet)
 
-    def buy_vip_points(self, kingdom, package_id, amount, sync=True, quiet=False):
+    def buy_vip_points(self, kingdom: int, package_id: int, amount: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase VIP points.
 
@@ -103,7 +103,7 @@ class Shop(BaseGgeSocket):
         """
         return self.buy_package_generic(kingdom, 2, -1, package_id, amount, sync, quiet)
 
-    def buy_from_master_blacksmith(self, kingdom, package_id, amount, sync=True, quiet=False):
+    def buy_from_master_blacksmith(self, kingdom: int, package_id: int, amount: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase items from the master blacksmith.
 
@@ -123,7 +123,7 @@ class Shop(BaseGgeSocket):
         """
         return self.buy_package_generic(kingdom, 0, 116, package_id, amount, sync, quiet)
 
-    def buy_from_nomad_shop(self, kingdom, package_id, amount, sync=True, quiet=False):
+    def buy_from_nomad_shop(self, kingdom: int, package_id: int, amount: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase items from the nomad shop.
 
@@ -143,7 +143,7 @@ class Shop(BaseGgeSocket):
         """
         return self.buy_package_generic(kingdom, 0, 94, package_id, amount, sync, quiet)
 
-    def buy_from_nomad_armorer(self, kingdom, package_id, amount, sync=True, quiet=False):
+    def buy_from_nomad_armorer(self, kingdom: int, package_id: int, amount: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase items from the nomad armorer.
 
@@ -163,7 +163,7 @@ class Shop(BaseGgeSocket):
         """
         return self.buy_package_generic(kingdom, 0, 49, package_id, amount, sync, quiet)
 
-    def buy_from_traveling_merchant(self, kingdom, package_id, amount, sync=True, quiet=False):
+    def buy_from_traveling_merchant(self, kingdom: int, package_id: int, amount: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase items from the traveling merchant.
 
@@ -183,7 +183,7 @@ class Shop(BaseGgeSocket):
         """
         return self.buy_package_generic(kingdom, 0, 22, package_id, amount, sync, quiet)
 
-    def buy_from_armorer(self, kingdom, package_id, amount, sync=True, quiet=False):
+    def buy_from_armorer(self, kingdom: int, package_id: int, amount: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase items from the armorer.
 
@@ -203,7 +203,7 @@ class Shop(BaseGgeSocket):
         """
         return self.buy_package_generic(kingdom, 0, 27, package_id, amount, sync, quiet)
 
-    def buy_from_blacksmith(self, kingdom, package_id, amount, sync=True, quiet=False):
+    def buy_from_blacksmith(self, kingdom: int, package_id: int, amount: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase items from the blacksmith.
 
@@ -223,7 +223,7 @@ class Shop(BaseGgeSocket):
         """
         return self.buy_package_generic(kingdom, 0, 101, package_id, amount, sync, quiet)
 
-    def buy_from_gift_seller(self, kingdom, package_id, amount, sync=True, quiet=False):
+    def buy_from_gift_seller(self, kingdom: int, package_id: int, amount: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase items from the gift seller.
 
@@ -243,7 +243,7 @@ class Shop(BaseGgeSocket):
         """
         return self.buy_package_generic(kingdom, 0, 66, package_id, amount, sync, quiet)
 
-    def buy_from_blade_coast_shop(self, kingdom, package_id, amount, sync=True, quiet=False):
+    def buy_from_blade_coast_shop(self, kingdom: int, package_id: int, amount: int, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Purchase items from the blade coast shop.
 
@@ -263,7 +263,7 @@ class Shop(BaseGgeSocket):
         """
         return self.buy_package_generic(kingdom, 0, 4, package_id, amount, sync, quiet)
 
-    def set_buying_castle(self, castle_id, kingdom=0, sync=True, quiet=False):
+    def set_buying_castle(self, castle_id: int, kingdom: int = 0, sync: bool = True, quiet: bool = False) -> dict | bool:
         """
         Set the castle where purchases will be delivered.
 
