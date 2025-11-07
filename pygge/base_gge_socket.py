@@ -92,19 +92,19 @@ class BaseGgeSocket(websocket.WebSocketApp):
             2: 1,     # invalid parameter value
             3: 1,     # missing parameter
             4: 1,     # invalid wod id
-            5: 1,     # invalid object id
+            # 5: 36,     # invalid object id
             6: 1,     # invalid position
             10: 1,    # not enough coins
             11: 1,    # not enough rubies
             55: 1,    # not enough resources
-            63: 2,    # no free construction slot
-            88: 1,    # too many units
+            63: 1,    # no free construction slot
+            88: 3,    # too many units - increased threshold
             90: 2,    # cant start new armies
             91: 1,    # invalid army request 
             95: 3,    # cooling down
             105: 1,   # not enough spies
             101: 1,   # missing units
-            203: 2,   # invalid area
+            203: 5,   # invalid area
             256: 4,   # commander is used
             308: 1,   # not enough silver runes
             309: 1,   # not enough gold runes
@@ -113,6 +113,7 @@ class BaseGgeSocket(websocket.WebSocketApp):
             327: 2,   # not enough special currency
         }
         self.error_counts = {error_code: 0 for error_code in self.error_thresholds}
+        self.ignore_error_thresholds = False
         self.error_lock = threading.Lock()
 
     def __onopen(self, ws: websocket.WebSocketApp) -> None:
@@ -422,7 +423,7 @@ class BaseGgeSocket(websocket.WebSocketApp):
             if status != 0 and status <= 500:
                 self.log_error_message(status, response["payload"]["command"], response["payload"].get("data"))
 
-                if response["payload"]["command"] and response["payload"]["command"] not in self.exempt_commands:
+                if not self.ignore_error_thresholds and response["payload"]["command"] and response["payload"]["command"] not in self.exempt_commands:
                     self._handle_error_status(status, response["payload"]["command"])
         
         # Process waiting messages
